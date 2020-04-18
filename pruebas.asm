@@ -293,7 +293,7 @@ suma:
     mov ax,sum               ; AX = sum
 
     mov cl,5
-    call printNumero
+    call printNumero         ; Imprime el número         
 
 resta:
     mov ax,num1              ; AX = num1
@@ -332,7 +332,7 @@ flujo5:
     mov ax,res               ; AX = res
 
     mov cl,4
-    call printNumero
+    call printNumero         ; Imprime el número 
 
 multiplicacion:
     mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
@@ -357,13 +357,13 @@ parteAlta:
     mov ax,aux1              ; AX = aux1
 
     mov cl,4
-    call printNumero
+    call printNumero         ; Imprime el número 
 
 parteBaja:
     mov ax,aux2              ; AX = aux2
 
     mov cl,4
-    call printNumero
+    call printNumero         ; Imprime el número 
 
 division:
     mov ax,num1              ; AX = num1
@@ -382,7 +382,7 @@ division:
     mov ax,coc               ; AX = coc
 
     mov cl,4
-    call printNumero
+    call printNumero         ; Imprime el número 
 
     mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
     lea dx,msjRes            ; Imprime mensaje del Residuo
@@ -391,7 +391,7 @@ division:
     mov ax,residuo           ; AX = residuo
         
     mov cl,4
-    call printNumero
+    call printNumero         ; Imprime el número 
 
     jmp menu                 ; Brinca al menu final
 
