@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.16)  17 APR 2020 21:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.16)  18 APR 2020 01:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -498,7 +498,7 @@ LaTeX Info: Redefining \nameref on input line 23.
 \@outlinefile=\write3
 \openout3 = `MBJA_Pr01.out'.
 
-<img/escudo_fi_color.png, id=80, 355.3275pt x 426.59375pt>
+<img/escudo_fi_color.png, id=92, 355.3275pt x 426.59375pt>
 File: img/escudo_fi_color.png Graphic file (type png)
 <use img/escudo_fi_color.png>
 Package pdftex.def Info: img/escudo_fi_color.png  used on input line 26.
@@ -599,7 +599,7 @@ valor hexadecimal del 'enter'[]
  []
 
 [4] [5] [6]
-<img/01.png, id=150, 540.0175pt x 139.52126pt>
+<img/01.png, id=166, 540.0175pt x 139.52126pt>
 File: img/01.png Graphic file (type png)
 <use img/01.png>
 Package pdftex.def Info: img/01.png  used on input line 334.
@@ -623,7 +623,7 @@ iones del S.O.[]
  []
 
 [10]
-<img/02.png, id=176, 538.01pt x 164.615pt>
+<img/02.png, id=191, 538.01pt x 164.615pt>
 File: img/02.png Graphic file (type png)
 <use img/02.png>
 Package pdftex.def Info: img/02.png  used on input line 477.
@@ -658,13 +658,13 @@ Overfull \hbox (7.88112pt too wide) in paragraph at lines 557--557
 iones del S.O.[] 
  []
 
-<img/03.png, id=190, 271.0125pt x 117.43875pt>
+<img/03.png, id=205, 271.0125pt x 117.43875pt>
 File: img/03.png Graphic file (type png)
 <use img/03.png>
 Package pdftex.def Info: img/03.png  used on input line 561.
 (pdftex.def)             Requested size: 364.19667pt x 157.82404pt.
 [12]
-<img/04.png, id=196, 265.99374pt x 116.435pt>
+<img/04.png, id=211, 265.99374pt x 116.435pt>
 File: img/04.png Graphic file (type png)
 <use img/04.png>
 Package pdftex.def Info: img/04.png  used on input line 567.
@@ -682,157 +682,175 @@ name{figure.4}) has been already used, duplicate ignored
                                                   \fi \fi 
 l.576     \newpage
                    <./img/03.png> <./img/04.png>]
-<img/diagramas/p01-Clear.pdf, id=205, 210.7875pt x 300.1614pt>
+<img/diagramas/p01-Clear.pdf, id=220, 210.7875pt x 300.1614pt>
 File: img/diagramas/p01-Clear.pdf Graphic file (type pdf)
 <use img/diagramas/p01-Clear.pdf>
 Package pdftex.def Info: img/diagramas/p01-Clear.pdf  used on input line 578.
 (pdftex.def)             Requested size: 218.51521pt x 311.17119pt.
-<img/diagramas/p01-Delete.pdf, id=206, 210.7875pt x 348.34138pt>
+<img/diagramas/p01-Delete.pdf, id=221, 210.7875pt x 348.34138pt>
 File: img/diagramas/p01-Delete.pdf Graphic file (type pdf)
 <use img/diagramas/p01-Delete.pdf>
 Package pdftex.def Info: img/diagramas/p01-Delete.pdf  used on input line 579.
 (pdftex.def)             Requested size: 213.96529pt x 353.5973pt.
-<img/diagramas/p01-PrintDigito.pdf, id=207, 210.7875pt x 300.1614pt>
+<img/diagramas/p01-PrintDigito.pdf, id=222, 210.7875pt x 300.1614pt>
 File: img/diagramas/p01-PrintDigito.pdf Graphic file (type pdf)
 <use img/diagramas/p01-PrintDigito.pdf>
 Package pdftex.def Info: img/diagramas/p01-PrintDigito.pdf  used on input line 
-581.
+582.
 (pdftex.def)             Requested size: 227.62206pt x 324.142pt.
-<img/diagramas/p01-LeerNum.pdf, id=208, 578.16pt x 1697.38132pt>
+<img/diagramas/p01-LeerNum.pdf, id=223, 578.16pt x 1697.38132pt>
 File: img/diagramas/p01-LeerNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-LeerNum.pdf>
-Package pdftex.def Info: img/diagramas/p01-LeerNum.pdf  used on input line 582.
+Package pdftex.def Info: img/diagramas/p01-LeerNum.pdf  used on input line 585.
 
 (pdftex.def)             Requested size: 578.15858pt x 1697.37718pt.
 File: img/diagramas/p01-LeerNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-LeerNum.pdf>
-Package pdftex.def Info: img/diagramas/p01-LeerNum.pdf  used on input line 582.
+Package pdftex.def Info: img/diagramas/p01-LeerNum.pdf  used on input line 585.
 
 (pdftex.def)             Requested size: 578.15858pt x 1697.37718pt.
-<img/diagramas/p01-LeerNum.pdf, id=211, page=1, 578.16pt x 1697.38132pt>
+<img/diagramas/p01-LeerNum.pdf, id=226, page=1, 578.16pt x 1697.38132pt>
 File: img/diagramas/p01-LeerNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-LeerNum.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-LeerNum.pdf , page1 used on input li
-ne 582.
+ne 585.
 (pdftex.def)             Requested size: 578.15858pt x 1697.37718pt.
 File: img/diagramas/p01-LeerNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-LeerNum.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-LeerNum.pdf , page1 used on input li
-ne 582.
+ne 585.
 (pdftex.def)             Requested size: 578.28209pt x 1697.73978pt.
  [14 <./img/diagramas/p01-Clear.pdf> <./img/diagramas/p01-Delete.pdf> <./img/di
 agramas/p01-PrintDigito.pdf>]
 File: img/diagramas/p01-LeerNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-LeerNum.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-LeerNum.pdf , page1 used on input li
-ne 582.
+ne 585.
 (pdftex.def)             Requested size: 578.28209pt x 1697.73978pt.
 File: img/diagramas/p01-LeerNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-LeerNum.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-LeerNum.pdf , page1 used on input li
-ne 582.
+ne 585.
 (pdftex.def)             Requested size: 578.28209pt x 1697.73978pt.
 File: img/diagramas/p01-LeerNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-LeerNum.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-LeerNum.pdf , page1 used on input li
-ne 582.
+ne 585.
 (pdftex.def)             Requested size: 578.28209pt x 1697.73978pt.
 
 [15 <./img/diagramas/p01-LeerNum.pdf>]
-<img/diagramas/p01-PrintNum.pdf, id=281, 614.295pt x 794.97pt>
+<img/diagramas/p01-PrintNum.pdf, id=296, 614.295pt x 794.97pt>
 File: img/diagramas/p01-PrintNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-PrintNum.pdf>
-Package pdftex.def Info: img/diagramas/p01-PrintNum.pdf  used on input line 583
+Package pdftex.def Info: img/diagramas/p01-PrintNum.pdf  used on input line 586
 .
 (pdftex.def)             Requested size: 614.29349pt x 794.96806pt.
 File: img/diagramas/p01-PrintNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-PrintNum.pdf>
-Package pdftex.def Info: img/diagramas/p01-PrintNum.pdf  used on input line 583
+Package pdftex.def Info: img/diagramas/p01-PrintNum.pdf  used on input line 586
 .
 (pdftex.def)             Requested size: 614.29349pt x 794.96806pt.
-<img/diagramas/p01-PrintNum.pdf, id=284, page=1, 614.295pt x 794.97pt>
+<img/diagramas/p01-PrintNum.pdf, id=299, page=1, 614.295pt x 794.97pt>
 File: img/diagramas/p01-PrintNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-PrintNum.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-PrintNum.pdf , page1 used on input l
-ine 583.
+ine 586.
 (pdftex.def)             Requested size: 614.29349pt x 794.96806pt.
 File: img/diagramas/p01-PrintNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-PrintNum.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-PrintNum.pdf , page1 used on input l
-ine 583.
+ine 586.
 (pdftex.def)             Requested size: 614.58406pt x 795.3441pt.
 File: img/diagramas/p01-PrintNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-PrintNum.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-PrintNum.pdf , page1 used on input l
-ine 583.
+ine 586.
 (pdftex.def)             Requested size: 614.58406pt x 795.3441pt.
 File: img/diagramas/p01-PrintNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-PrintNum.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-PrintNum.pdf , page1 used on input l
-ine 583.
+ine 586.
 (pdftex.def)             Requested size: 614.58406pt x 795.3441pt.
 File: img/diagramas/p01-PrintNum.pdf Graphic file (type pdf)
 <use img/diagramas/p01-PrintNum.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-PrintNum.pdf , page1 used on input l
-ine 583.
+ine 586.
 (pdftex.def)             Requested size: 614.58406pt x 795.3441pt.
  [16 <./img/diagramas/p01-PrintNum.pdf>]
-<img/diagramas/p01-DiagramaFlujo.pdf, id=304, 578.16pt x 3394.76263pt>
+<img/diagramas/p01-DiagramaFlujo.pdf, id=319, 578.16pt x 3394.76263pt>
 File: img/diagramas/p01-DiagramaFlujo.pdf Graphic file (type pdf)
 <use img/diagramas/p01-DiagramaFlujo.pdf>
 Package pdftex.def Info: img/diagramas/p01-DiagramaFlujo.pdf  used on input lin
-e 584.
+e 587.
 (pdftex.def)             Requested size: 578.15858pt x 3394.7544pt.
 File: img/diagramas/p01-DiagramaFlujo.pdf Graphic file (type pdf)
 <use img/diagramas/p01-DiagramaFlujo.pdf>
 Package pdftex.def Info: img/diagramas/p01-DiagramaFlujo.pdf  used on input lin
-e 584.
+e 587.
 (pdftex.def)             Requested size: 578.15858pt x 3394.7544pt.
-<img/diagramas/p01-DiagramaFlujo.pdf, id=307, page=1, 578.16pt x 3394.76263pt>
+<img/diagramas/p01-DiagramaFlujo.pdf, id=322, page=1, 578.16pt x 3394.76263pt>
 File: img/diagramas/p01-DiagramaFlujo.pdf Graphic file (type pdf)
 <use img/diagramas/p01-DiagramaFlujo.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-DiagramaFlujo.pdf , page1 used on in
-put line 584.
+put line 587.
 (pdftex.def)             Requested size: 578.15858pt x 3394.7544pt.
 File: img/diagramas/p01-DiagramaFlujo.pdf Graphic file (type pdf)
 <use img/diagramas/p01-DiagramaFlujo.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-DiagramaFlujo.pdf , page1 used on in
-put line 584.
+put line 587.
 (pdftex.def)             Requested size: 578.28209pt x 3395.47958pt.
 File: img/diagramas/p01-DiagramaFlujo.pdf Graphic file (type pdf)
 <use img/diagramas/p01-DiagramaFlujo.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-DiagramaFlujo.pdf , page1 used on in
-put line 584.
+put line 587.
 (pdftex.def)             Requested size: 578.28209pt x 3395.47958pt.
 File: img/diagramas/p01-DiagramaFlujo.pdf Graphic file (type pdf)
 <use img/diagramas/p01-DiagramaFlujo.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-DiagramaFlujo.pdf , page1 used on in
-put line 584.
+put line 587.
 (pdftex.def)             Requested size: 578.28209pt x 3395.47958pt.
 File: img/diagramas/p01-DiagramaFlujo.pdf Graphic file (type pdf)
 <use img/diagramas/p01-DiagramaFlujo.pdf, page 1>
 Package pdftex.def Info: img/diagramas/p01-DiagramaFlujo.pdf , page1 used on in
-put line 584.
+put line 587.
 (pdftex.def)             Requested size: 578.28209pt x 3395.47958pt.
 
 [17 <./img/diagramas/p01-DiagramaFlujo.pdf>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 600.
- [18]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 600.
+<img/Primer numero.pdf, id=341, 614.295pt x 794.97pt>
+File: img/Primer numero.pdf Graphic file (type pdf)
+<use img/Primer numero.pdf>
+Package pdftex.def Info: img/Primer numero.pdf  used on input line 598.
+(pdftex.def)             Requested size: 432.48051pt x 559.68973pt.
+<img/Suma.pdf, id=342, 614.295pt x 794.97pt>
+File: img/Suma.pdf Graphic file (type pdf)
+<use img/Suma.pdf>
+Package pdftex.def Info: img/Suma.pdf  used on input line 603.
+(pdftex.def)             Requested size: 455.24411pt x 589.14197pt.
+ [18 <./img/Primer numero.pdf>]
+<img/residuo.pdf, id=364, 614.295pt x 397.485pt>
+File: img/residuo.pdf Graphic file (type pdf)
+<use img/residuo.pdf>
+Package pdftex.def Info: img/residuo.pdf  used on input line 607.
+(pdftex.def)             Requested size: 455.24411pt x 294.57098pt.
+
+[19 <./img/Suma.pdf>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 621.
+ [20 <./img/residuo.pdf>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 621.
  (./MBJA_Pr01.aux
 LaTeX Info: Redefining \. on input line 24.
 LaTeX Info: Redefining \% on input line 24.
 )
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 600.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 600.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 621.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 621.
 Package rerunfilecheck Info: File `MBJA_Pr01.out' has not changed.
-(rerunfilecheck)             Checksum: 99D83422AC73B788A0F69C0793CA0D9B;1156.
+(rerunfilecheck)             Checksum: B6594116B0E669DA20B3FD67D84BA5F7;1343.
  ) 
 Here is how much of TeX's memory you used:
- 9027 strings out of 482055
- 135167 string characters out of 5937641
+ 9053 strings out of 482055
+ 135678 string characters out of 5937641
  411673 words of memory out of 5000000
- 24425 multiletter control sequences out of 15000+600000
+ 24443 multiletter control sequences out of 15000+600000
  604345 words of font info for 75 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
  38i,18n,43p,815b,500s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -851,10 +869,10 @@ lm/lmr7.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/lm/lmr8
 </usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr
 /local/texlive/2019basic/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/loca
 l/texlive/2019basic/texmf-dist/fonts/type1/public/lm/lmtt12.pfb>
-Output written on MBJA_Pr01.pdf (19 pages, 654584 bytes).
+Output written on MBJA_Pr01.pdf (21 pages, 750551 bytes).
 PDF statistics:
- 390 PDF objects out of 1000 (max. 8388607)
- 303 compressed objects within 4 object streams
- 57 named destinations out of 1000 (max. 500000)
- 253 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 470 PDF objects out of 1000 (max. 8388607)
+ 364 compressed objects within 4 object streams
+ 62 named destinations out of 1000 (max. 500000)
+ 292 words of extra memory for PDF output out of 10000 (max. 10000000)
 
