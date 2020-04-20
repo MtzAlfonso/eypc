@@ -353,13 +353,13 @@ multiplicacion:
     mov aux1,ax              ; aux1 = AX, los primeros cuatro digitos
     mov aux2,dx              ; aux2 = DX, los últimos cuatro digitos
 
-parteAlta:
+    ; Primeros Cuatro Digitos
     mov ax,aux1              ; AX = aux1
 
     mov cl,4
     call printNumero         ; Imprime el número 
 
-parteBaja:
+    ; Segundos Cuatro Digitos
     mov ax,aux2              ; AX = aux2
 
     mov cl,4

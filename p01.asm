@@ -4,7 +4,7 @@ title "P01: Calculadora"
     .stack 64               ; tamano de stack/pila, define el tamano del segmento de stack, se mide en bytes
 
 clear macro              	; macro para limpiar pantalla
-    mov ah,0 				;AH = 0
+    mov ah,0h 				;AH = 0
     mov al,3h 				;AL = 3h
     int 10h 				;Interrupcion 10h
 endm clear
@@ -20,6 +20,13 @@ delete macro 				; macro para eliminar un caracter
 	mov dl,08h
 	int 21h
 endm delete
+
+printDigito macro char       ; macro para imprimir un digito
+    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
+    mov dl,char              ; DL = AL, AL contiene el caracter a imprimir
+    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+endm printDigito
 
 .data
     ; variables para guardar los digitos
@@ -38,6 +45,7 @@ endm delete
     residuo			dw 		0
 
     ; variables auxiliares
+    num             dw      0
     temp 			dw		0
     aux1 			dw 		0
     aux2			dw 		0
@@ -62,26 +70,53 @@ endm delete
 
 .code
 
-inicio:
-    mov ax,@data             ; AX = directiva @data
-    mov ds,ax                ; DS = AX, inicializa registro de segmento de datos
-    xor cx,cx                ; CL = 0, hace la funcion de un contador
+printNumero proc             ; procedimiento para imprimir el número completo
+    cmp cl,5                 ; Compara CL con 5
+    jb imprime4              ; Si CL < 5 entonces imprime solo 4 dígitos
 
-    clear                    ; limpiar pantalla
-    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
-    lea dx,titulo            ; Imprime el mensaje de titulo
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
-    lea dx,descripcion       ; Imprime una descripcion del programa
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    mov bx,10000             ; BX = 10000
+    xor dx,dx                ; DX = 0000h
+    div bx                   ; DX:AX = AX / BX
+    mov temp,dx              ; temp = DX
 
-    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
-    lea dx,msjIngrese1       ; Imprime mensaje solicitando el primer numero al usuario
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
-    lea dx,msjX
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    printDigito al
 
+    mov ax,temp              ; AX = temp
+imprime4:
+    mov bx,1000              ; BX = 1000
+    xor dx,dx                ; DX = 0000h
+    div bx                   ; DX:AX = AX / BX
+    mov temp,dx              ; temp = DX
+
+    printDigito al
+
+    mov ax,temp              ; AX = temp
+
+    mov bx,100               ; BX = 100
+    xor dx,dx                ; DX = 0000h
+    div bx                   ; DX:AX = AX / BX
+    mov temp,dx              ; temp = DX
+
+    printDigito al
+
+    mov ax,temp              ; AX = temp
+
+    mov bx,10                ; BX = 10
+    xor dx,dx                ; DX = 0000h
+    div bx                   ; DX:AX = AX / BX
+    mov temp,dx              ; temp = DX
+
+    printDigito al
+
+    mov ax,temp              ; AX = temp
+
+    printDigito al
+
+    ret
+endp printNumero
+
+leerNum proc
+    xor cl,cl
 leer:
     mov ah,08h               ; Instrucción para ingresar datos sin verlos en pantalla
     int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
@@ -93,16 +128,16 @@ leer:
     je borrar
 
     cmp al,0Dh               ; Compara el valor en AL con el valor hexadecimal del 'enter'
-    je flujo2 	             ; Si el usuario da 'enter'
+    je flujo2                ; Si el usuario da 'enter'
     jmp sinNumero
 
 borrar:
-	delete
-	sub cl,1
+    delete
+    sub cl,1
 
 sinNumero:
-	cmp cl,4
-	je leer
+    cmp cl,4
+    je leer
     cmp al,40h               ; Compara AL con 40h
     jae leer                 ; Si es mayor o igual a 40h vuelve a leer
     cmp al,30h               ; Compara AL con 30h
@@ -148,36 +183,36 @@ flujo1:
     cmp cl,5                 ; Compara CL con 4
     jb leer                  ; Si CL < 4 entonces lee el siguiente dígito
 
-finalEnter1:
+finalEnter:
     mov ah,08h               ; Instrucción para ingresar datos sin verlos en pantalla
     int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
 
     cmp al,0Dh               ; Compara el valor en AL con el valor hexadecimal del 'enter'
     je flujo2                ; Si el usuario da 'enter' brinca al flujo2
-    jmp finalEnter1          ; Si NO da enter entonces sigue leyendo sin imprimir
+    jmp finalEnter          ; Si NO da enter entonces sigue leyendo sin imprimir
 
 flujo2:
     xor ah,ah                ; limpia la parte alta del registro AX
     mov al,um                ; AL = um
     mov bx,1000              ; BX = 1000
     mul bx                   ; DX:AX = AX * BX
-    mov num1,ax              ; num = AX
+    mov num,ax               ; num = AX
 
     xor ah,ah                ; limpia la parte alta del registro AX
     mov al,c                 ; AL = c
     mov bl,100               ; BL = 100
     mul bl                   ; AX = AL * BL
-    add num1,ax              ; num1 = num1 + AX
+    add num,ax               ; num1 = num1 + AX
 
     xor ah,ah                ; limpia la parte alta del registro AX
     mov al,d                 ; AL = d
     mov bl,10                ; BL = 10
     mul bl                   ; AX = AL * BL
-    add num1,ax              ; num1 = num1 + AX
+    add num,ax               ; num1 = num1 + AX
 
     xor ah,ah                ; limpia la parte alta del registro AX
     mov al,u                 ; AL = u
-    add num1,ax              ; num1 = num1 + AX
+    add num,ax               ; num1 = num1 + AX
 
     cmp cl,1                 ; Compara CL con 1
     je i1                    ; Si Cl == 1 entonces salta a i1
@@ -186,165 +221,65 @@ flujo2:
     cmp cl,3                 ; Compara CL con 3
     je i3                    ; Si Cl == 3 entonces salta a i3
     cmp cl,4                 ; Compara CL con 4
-    je ingrese2              ; Si Cl == 4 entonces salta a ingrese2
-
+    je flujo3              ; Si Cl == 4 entonces salta a flujo3
 i1:
-    mov ax,num1              ; AX = num1
+    mov ax,num              ; AX = num1
     mov bx,1000              ; BX = 1000
+    xor dx,dx
     div bx                   ; DX:AX = AX / BX
-    mov num1,ax              ; num = AX
-    jmp ingrese2             ; Salta a ingrese2
+    mov num,ax              ; num = AX
+    jmp flujo3             ; Salta a flujo3
 i2:
-    mov ax,num1              ; AX = num1
+    mov ax,num              ; AX = num1
     mov bx,100               ; BX = 100
+    xor dx,dx
     div bx                   ; DX:AX = AX / BX
-    mov num1,ax              ; num = AX
-    jmp ingrese2             ; Salta a ingrese2
+    mov num,ax              ; num = AX
+    jmp flujo3             ; Salta a flujo3
 i3:
-    mov ax,num1              ; AX = num1
+    mov ax,num              ; AX = num1
     mov bx,10                ; BX = 10
+    xor dx,dx
     div bx                   ; DX:AX = AX / BX
-    mov num1,ax              ; num = AX
-    jmp ingrese2             ; Salta a ingrese2
+    mov num,ax              ; num = AX
+    jmp flujo3             ; Salta a flujo3
+flujo3:
+    mov ax,num
+    ret
+endp leerNum
 
-ingrese2:
-    xor cx,cx                ; limpia el registro CX
+inicio:
+    mov ax,@data             ; AX = directiva @data
+    mov ds,ax                ; DS = AX, inicializa registro de segmento de datos
+    xor cx,cx                ; CL = 0, hace la funcion de un contador
 
-                             ; Ingresar segundo numero
+    clear                    ; limpiar pantalla
     mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
-    lea dx,msjIngrese2       ; Imprime mensaje solicitando el segundo numero al usuario
+    lea dx,titulo            ; Imprime el mensaje de titulo
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,descripcion       ; Imprime una descripcion del programa
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,msjIngrese1       ; Imprime mensaje solicitando el primer numero al usuario
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,msjX
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+
+    call leerNum
+    mov num1,ax
+
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,msjIngrese2       ; Imprime mensaje solicitando el primer numero al usuario
     int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
     mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
     lea dx,msjY
     int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
 
-leer2:
-    mov ah,08h               ; Instrucción para ingresar datos sin verlos en pantalla
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    cmp cl,0                 ; Compara CL con 0
-    je sinNumero2             ; Si CL == 0 entonces brinca a 'sinNumero2'
-
-    cmp al,08h
-    je borrar2
-
-    cmp al,0Dh               ; Compara el valor en AL con el valor hexadecimal del 'enter'
-    je flujo4                ; Si CL == 'enter' brinca al flujo 4
-    jmp sinNumero2
-
-borrar2:
-	delete
-	sub cl,1
-
-sinNumero2:
-	cmp cl,4
-	je leer2
-    cmp al,40h               ; Compara AL con 40h
-    jae leer2                ; Si es mayor o igual a 40h vuelve a leer
-    cmp al,30h               ; Compara AL con 30h
-    jb leer2                 ; Si es menor a 30 vuelve a leer
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    cmp cl,0                 ; Compara CL con 0
-    je miles2                ; Si CL == 0 es porque es el primer digito
-
-    cmp cl,1                 ; Compara CL con 1
-    je centenas2             ; Si CL == 1 es porque es el segundo digito
-
-    cmp cl,2                 ; Compara CL con 2
-    je decenas2              ; Si CL == 2 es porque es el tercer digito
-
-    cmp cl,3                 ; Compara CL con 3
-    je unidades2             ; Si CL == 3 es porque es el cuarto digito
-
-miles2:
-    sub al,30h               ; Resta 30h para obtener el valor numerico del codigo ascii
-    mov um,al                ; um = AL
-
-    jmp flujo3               ; Salta al flujo3
-
-centenas2:
-    sub al,30h               ; Resta 30h para obtener el valor numerico del codigo ascii
-    mov c,al                 ; c = AL
-
-    jmp flujo3               ; Salta al flujo3
-
-decenas2:
-    sub al,30h               ; Resta 30h para obtener el valor numerico del codigo ascii
-    mov d,al                 ; d = AL
-
-    jmp flujo3               ; Salta al flujo3
-
-unidades2:
-    sub al,30h               ; Resta 30h para obtener el valor numerico del codigo ascii
-    mov u,al                 ; u = AL
-
-flujo3:
-    add cl,1                 ; CL = CL + 1
-    cmp cl,5                 ; Compara CL con 4
-    jb leer2                 ; Si CL < 4 entonces continua leyendo digitos
-
-finalEnter2:
-    mov ah,08h               ; Instrucción para ingresar datos sin verlos en pantalla
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    cmp al,0Dh               ; Compara el valor en AL con el valor hexadecimal del 'enter'
-    je flujo4                ; Si el usuario da 'enter' brinca al flujo4
-    jmp finalEnter2          ; Si NO da enter entonces sigue leyendo sin imprimir
-
-flujo4:
-    xor ah,ah                ; limpia la parte alta del registro AX
-    mov al,um                ; AL = um
-    mov bx,1000              ; BX = 1000
-    mul bx                   ; DX:AX = AX * BX
-    mov num2,ax              ; num2 = AX
-
-    xor ah,ah                ; limpia la parte alta del registro AX
-    mov al,c                 ; AL = c
-    mov bl,100               ; BL = 100
-    mul bl                   ; AX = AL * BL
-    add num2,ax              ; num2 = num2 + AX
-
-    xor ah,ah                ; limpia la parte alta del registro AX
-    mov al,d                 ; AL = d
-    mov bl,10                ; BL = 10
-    mul bl                   ; AX = AL * BL
-    add num2,ax              ; num2 = num2 + AX
-
-    xor ah,ah                ; limpia la parte alta del registro AX
-    mov al,u                 ; AL = u
-    add num2,ax              ; num2 = num2 + AX
-
-    cmp cl,1                 ; Compara CL con 1
-    je j1                    ; Si Cl == 1 entonces salta a j1
-    cmp cl,2                 ; Compara CL con 2
-    je j2                    ; Si Cl == 2 entonces salta a j2
-    cmp cl,3                 ; Compara CL con 3
-    je j3                    ; Si Cl == 3 entonces salta a j3
-    cmp cl,4                 ; Compara CL con 4
-    je suma                  ; Si Cl == 4 entonces salta a suma
-
-j1:
-    mov ax,num2              ; AX = num2
-    mov bx,1000              ; BX = 1000
-    div bx                   ; DX:AX = AX / BX
-    mov num2,ax              ; num2 = AX
-    jmp suma                 ; Salta a suma
-j2:
-    mov ax,num2              ; AX = num2
-    mov bx,100               ; BX = 100
-    div bx                   ; DX:AX = AX / BX
-    mov num2,ax              ; num2 = AX
-    jmp suma                 ; Salta a suma
-j3:
-    mov ax,num2              ; AX = num2
-    mov bx,10                ; BX = 10
-    div bx                   ; DX:AX = AX / BX
-    mov num2,ax              ; num2 = AX
-    jmp suma                 ; Salta a suma
+    call leerNum
+    mov num2,ax
 
 suma:
     mov ax,num1              ; AX = num1
@@ -357,63 +292,8 @@ suma:
 
     mov ax,sum               ; AX = sum
 
-                             ;;; Imprime decena de millar ;;;
-    mov bx,10000             ; BX = 10000
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    mov ax,temp              ; AX = temp
-
-                             ;;; Imprime unidades de millar ;;;
-    mov bx,1000              ; BX = 1000
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    mov ax,temp              ; AX = temp
-
-                             ;;; Imprime centenas ;;;
-    mov bx,100               ; BX = 100
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    mov ax,temp              ; AX = temp
-
-                             ;;; Imprime decenas ;;;
-    mov bx,10                ; BX = 10
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-                             ;;; Imprime unidades ;;;
-    mov ax,temp              ; AX = temp
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    mov cl,5
+    call printNumero         ; Imprime el número         
 
 resta:
     mov ax,num1              ; AX = num1
@@ -422,14 +302,14 @@ resta:
     jb menor                 ; Si el primer numero es menor que el segundo entonces brinca a etiqueta 'menor'
     sub ax,num2              ; Si el primer numero es mayor que el segundo realiza la resta directamente, AX = AX - num2
     mov res,ax               ; res = AX
-    jmp flujo5               ; Brinca al flujo5 para imprimir el resultado
+    jmp flujo4               ; Brinca al flujo4 para imprimir el resultado
 
 menor:
     sub bx,num1              ; Como el primero es menor entonces resta el primer numero al segundo, BX = BX - num1
     mov res,bx               ; res = BX
     add nega,1               ; nega = nega + 1, esta operacion sirve para comparar si el resultado debe ser negativo o no
 
-flujo5:
+flujo4:
     mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
     lea dx, msjResta         ; Imprime el mensaje de Resta
     int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
@@ -444,57 +324,15 @@ flujo5:
 
 positivo:
     cmp cl,1                 ; Compara CL con 1
-    je flujo6                ; Si CL == 1, si es negativo entonces continua con el flujo normal
+    je flujo5                ; Si CL == 1, si es negativo entonces continua con el flujo normal
     mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
     mov dl,20h               ; DL = 20h, imprime un espacio para dar mejor presentacion
     int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-flujo6:
+flujo5:
     mov ax,res               ; AX = res
 
-    						 ;;; Imprime unidades de millar ;;;
-    mov bx,1000              ; BX = 1000
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    mov ax,temp              ; AX = temp
-
-                             ;;; Imprime centenas ;;;
-    mov bx,100               ; BX = 100
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    mov ax,temp              ; AX = temp
-
-                             ;;; Imprime decenas ;;;
-    mov bx,10                ; BX = 10
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-                             ;;; Imprime unidades ;;;
-    mov ax,temp              ; AX = temp
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    mov cl,4
+    call printNumero         ; Imprime el número 
 
 multiplicacion:
     mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
@@ -515,102 +353,17 @@ multiplicacion:
     mov aux1,ax              ; aux1 = AX, los primeros cuatro digitos
     mov aux2,dx              ; aux2 = DX, los últimos cuatro digitos
 
-parteAlta:
+    ; Primeros Cuatro Digitos
     mov ax,aux1              ; AX = aux1
 
-    						 ;;; Imprime decenas de millon ;;;
-    mov bx,1000              ; BX = 1000
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
+    mov cl,4
+    call printNumero         ; Imprime el número 
 
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    mov ax,temp              ; AX = temp
-
-                             ;;; Imprime unidad de millon ;;;
-    mov bx,100               ; BX = 100
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    mov ax,temp              ; AX = temp
-
-                             ;;; Imprime centenas de millar ;;;
-    mov bx,10                ; BX = 10
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-                             ;;; Imprime decenas de millar ;;;
-    mov ax,temp              ; AX = temp
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-parteBaja:
+    ; Segundos Cuatro Digitos
     mov ax,aux2              ; AX = aux2
 
-    						 ;;; Imprime unidades de millar ;;; 
-    mov bx,1000              ; BX = 1000
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    mov ax,temp              ; AX = temp
-
-                             ;;; Imprime centenas ;;;
-    mov bx,100               ; BX = 100
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    mov ax,temp              ; AX = temp
-
-                             ;;; Imprime decenas ;;;
-    mov bx,10                ; BX = 10
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-                             ;;; Imprime unidades ;;;
-    mov ax,temp              ; AX = temp
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    mov cl,4
+    call printNumero         ; Imprime el número 
 
 division:
     mov ax,num1              ; AX = num1
@@ -628,101 +381,18 @@ division:
 
     mov ax,coc               ; AX = coc
 
-    						 ;;; Imprime unidades de millar ;;;
-    mov bx,1000              ; BX = 1000
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    mov ax,temp              ; AX = temp
-
-                             ;;; Imprime centenas ;;;
-    mov bx,100               ; BX = 100
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    mov ax,temp              ; AX = temp
-
-                             ;;; Imprime decenas ;;;
-    mov bx,10                ; BX = 10
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-                             ;;; Imprime unidades ;;;
-    mov ax,temp              ; AX = temp
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    mov cl,4
+    call printNumero         ; Imprime el número 
 
     mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
     lea dx,msjRes            ; Imprime mensaje del Residuo
     int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
 
     mov ax,residuo           ; AX = residuo
+        
+    mov cl,4
+    call printNumero         ; Imprime el número 
 
-    						 ;;; Imprime unidades de millar ;;;
-    mov bx,1000              ; BX = 1000
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    mov ax,temp              ; AX = temp
-
-                             ;;; Imprime centenas ;;;
-    mov bx,100               ; BX = 100
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-    mov ax,temp              ; AX = temp
-
-                             ;;; Imprime decenas ;;;
-    mov bx,10                ; BX = 10
-    xor dx,dx                ; DX = 0000h
-    div bx                   ; DX:AX = AX / BX
-    mov temp,dx              ; temp = DX
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
-
-                             ;;;; Imprime unidades ;;;
-    mov ax,temp              ; AX = temp
-
-    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
-    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
-    add dl,30h               ; DL = DL + 30h para obtener el equivalente en codigo ASCII
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
     jmp menu                 ; Brinca al menu final
 
 isZero:
@@ -753,11 +423,11 @@ typeEnter:
     int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
 
     cmp al,08h
-    jne flujo7
+    jne flujo6
     delete
     jmp respuesta
 
-flujo7:
+flujo6:
     cmp al,0Dh               ; Compara el valor en AL con el valor hexadecimal del 'enter'
     jne typeEnter            ; Si no digita 'enter' entonces continua leyendo respuestas sin mostrarlas en pantalla
 

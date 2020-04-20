@@ -251,21 +251,203 @@ endp leerNum
 inicio:
     mov ax,@data             ; AX = directiva @data
     mov ds,ax                ; DS = AX, inicializa registro de segmento de datos
+    xor cx,cx                ; CL = 0, hace la funcion de un contador
 
-    mov ax,4321
-    mov bx,123
-    xor dx,dx
+    clear                    ; limpiar pantalla
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,titulo            ; Imprime el mensaje de titulo
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,descripcion       ; Imprime una descripcion del programa
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,msjIngrese1       ; Imprime mensaje solicitando el primer numero al usuario
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,msjX
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+
+    call leerNum
+    mov num1,ax
+
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,msjIngrese2       ; Imprime mensaje solicitando el primer numero al usuario
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,msjY
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+
+    call leerNum
+    mov num2,ax
+
+suma:
+    mov ax,num1              ; AX = num1
+    add ax,num2              ; AX = AX + num2
+    mov sum,ax               ; sum = AX
+
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,msjSuma           ; Imprime mensaje de suma
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+
+    mov ax,sum               ; AX = sum
+
+    mov cl,5
+    call printNumero         ; Imprime el número         
+
+resta:
+    mov ax,num1              ; AX = num1
+    mov bx,num2              ; BX = num2
+    cmp ax,bx                ; Compara AX con BX
+    jb menor                 ; Si el primer numero es menor que el segundo entonces brinca a etiqueta 'menor'
+    sub ax,num2              ; Si el primer numero es mayor que el segundo realiza la resta directamente, AX = AX - num2
+    mov res,ax               ; res = AX
+    jmp flujo4               ; Brinca al flujo4 para imprimir el resultado
+
+menor:
+    sub bx,num1              ; Como el primero es menor entonces resta el primer numero al segundo, BX = BX - num1
+    mov res,bx               ; res = BX
+    add nega,1               ; nega = nega + 1, esta operacion sirve para comparar si el resultado debe ser negativo o no
+
+flujo4:
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx, msjResta         ; Imprime el mensaje de Resta
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+
+    mov cl,nega              ; CL = nega
+    cmp cl,1                 ; Compara CL con 1
+    jne positivo             ; Si CL != 1 quiere decir que el numero es positivo y por lo tanto sigue el flujo normal
+    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
+    mov dl,2Dh               ; DL = 2Dh, 2Dh es el codigo equivalente al simbolo del  signo negativo
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    sub nega,1               ; nega = nega - 1, limpia la variable 'nega' para iniciar nuevamente
+
+positivo:
+    cmp cl,1                 ; Compara CL con 1
+    je flujo5                ; Si CL == 1, si es negativo entonces continua con el flujo normal
+    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
+    mov dl,20h               ; DL = 20h, imprime un espacio para dar mejor presentacion
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+flujo5:
+    mov ax,res               ; AX = res
+
+    mov cl,4
+    call printNumero         ; Imprime el número 
+
+multiplicacion:
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx, msjMult 		 ; Imprime mensaje Multiplicacion
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+
+    mov ax,num1              ; AX = num1
+    mov bx,num2              ; BX = num2
+    xor dx,dx                ; DX = 0000h
+    mul bx                   ; DX:AX = AX * BX
+    mov [mult],ax            ; [mult] = AX , guarda la parte baja del producto
+    mov [mult+2],dx          ; [mult+2] = DX , guarda la parte alta del producto
+
+    mov ax,mult              ; AX = mult
+    mov bx,10000             ; BX = 10000
+    div bx                   ; DX:AX = AX / BX, separa el producto en dos partes para imprimir el resultado en grupos de 4 digitos
+
+    mov aux1,ax              ; aux1 = AX, los primeros cuatro digitos
+    mov aux2,dx              ; aux2 = DX, los últimos cuatro digitos
+
+    ; Primeros Cuatro Digitos
+    mov ax,aux1              ; AX = aux1
+
+    mov cl,4
+    call printNumero         ; Imprime el número 
+
+    ; Segundos Cuatro Digitos
+    mov ax,aux2              ; AX = aux2
+
+    mov cl,4
+    call printNumero         ; Imprime el número 
+
+division:
+    mov ax,num1              ; AX = num1
+    mov bx,num2              ; BX = num2
+    cmp bx,0                 ; Compara BX con 0
+    je isZero                ; Si BX == 0, si el divisor es 0 entonces brinca al bloque 'isZero'
+    xor dx,dx                ; DX = 0000h
     div bx                   ; DX:AX = AX / BX
-    
     mov coc,ax               ; coc = AX
     mov residuo,dx           ; residuo = DX
+
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx, msjDiv           ; Imprime el mensaje del Cociente
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+
+    mov ax,coc               ; AX = coc
+
+    mov cl,4
+    call printNumero         ; Imprime el número 
+
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,msjRes            ; Imprime mensaje del Residuo
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
 
     mov ax,residuo           ; AX = residuo
         
     mov cl,4
     call printNumero         ; Imprime el número 
 
+    jmp menu                 ; Brinca al menu final
+
+isZero:
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,msjZero           ; Imprime un mensaje
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+
+menu:
+    						 ; Imprime el mensaje de menu
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx,msjInicio         ; Muestra mensaje para volver al inicio
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+
+respuesta:
+    mov ah,08h               ; Instrucción para ingresar datos sin verlos en pantalla
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    cmp al,21h               ; Compara AL con 21h, los caracteres menores a 21h son de control y no son imprimibles
+    jb respuesta             ; Si AL es menor a 21h entonces vuelve a leer una respuesta del usuario del menu final
+
+    mov ah,02h               ; AH = 02H, prepara AH para imprimir un caracter
+    mov dl,al                ; DL = AL, AL contiene el caracter a imprimir
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    mov resp,al              ; resp = AL, guarda la respuesta del usuario
+    mov cl,1
+
+typeEnter:
+    mov ah,08h               ; Instrucción para ingresar datos sin verlos en pantalla
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+
+    cmp al,08h
+    jne flujo6
+    delete
+    jmp respuesta
+
+flujo6:
+    cmp al,0Dh               ; Compara el valor en AL con el valor hexadecimal del 'enter'
+    jne typeEnter            ; Si no digita 'enter' entonces continua leyendo respuestas sin mostrarlas en pantalla
+
+    mov al,resp              ; AL = resp
+
+    cmp al,'S'               ; Compara AL con 'S'
+    je inicio                ; Si AL == 'S' vuelve al inicio del programa
+    cmp al,'s'               ; Compara AL con 's'
+    je inicio                ; Si AL == 's' vuelve al inicio del programa
+    cmp al,'N'               ; Compara AL con 'N'
+    je salir                 ; Si AL == 'N' sale del programa
+    cmp al,'n'               ; Compara AL con 'n'
+    je salir                 ; Si AL == 'n' sale del programa
+    mov ah,09h               ; Prepara registro ah para imprimir un mensaje en pantalla
+    lea dx, msjError         ; Si no se cumple ninguna condicion anterior, imprime un mensaje de error solicitando una opcion correcta
+    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    jmp menu                 ; Regresa al menu final
+
 salir:						 ; inicia etiqueta Salir
+    clear
     mov ah,4Ch               ; AH = 4Ch, opcion para terminar programa
     mov al,00h               ; AL = 0 exit Code, codigo devuelto al finalizar el programa
     int 21h                  ; Interrupcion 21h para controlar funciones del S.O.

@@ -13,11 +13,11 @@
 \contentsline {subsection}{\numberline {2.3}Suma}{10}{subsection.2.3}%
 \contentsline {subsection}{\numberline {2.4}Resta}{11}{subsection.2.4}%
 \contentsline {subsection}{\numberline {2.5}Multiplicación}{13}{subsection.2.5}%
-\contentsline {subsection}{\numberline {2.6}División}{13}{subsection.2.6}%
-\contentsline {subsection}{\numberline {2.7}Menu}{13}{subsection.2.7}%
-\contentsline {section}{\numberline {3}Diagramas de Flujo.}{14}{section.3}%
-\contentsline {section}{\numberline {4}Pruebas de Escritorio}{18}{section.4}%
-\contentsline {subsection}{\numberline {4.1}leerNum}{18}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Diagrama Principal}{19}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Impresión}{20}{subsection.4.3}%
-\contentsline {section}{\numberline {5}Conclusión}{20}{section.5}%
+\contentsline {subsection}{\numberline {2.6}División}{15}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}Menu}{17}{subsection.2.7}%
+\contentsline {section}{\numberline {3}Diagramas de Flujo.}{19}{section.3}%
+\contentsline {section}{\numberline {4}Pruebas de Escritorio}{23}{section.4}%
+\contentsline {subsection}{\numberline {4.1}leerNum}{23}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Diagrama Principal}{24}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}printNum}{25}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Conclusión}{25}{section.5}%

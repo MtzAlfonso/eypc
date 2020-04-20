@@ -136,7 +136,7 @@ endm printDigito
 
     Al leer un número de más de un dígito en lenguaje ensamblador, es necesario leer cada dígito por separado sin embargo para el usuario dará la impresión de ingresar el número completo.
 
-    Para esto se hizo uso del valor $08h$ guardado en el registro $AH$ para que la interrupción $21h$ nos permita leer datos sin mostrarlos en pantalla; en caso de  que el valor en el registro $AL$ corresponda a un número en su respectivo código ASCII \footnote{\url{https://ascii.cl/es/}}, $i.e.$ entre $30h$ y $39h$, entonces se dibujará en pantalla, de lo contrario seguirá leyendo caracteres sin mostrarlos. El planteamiento se observa de la siguiente manera:
+    Para esto se hizo uso del valor $08h$ guardado en el registro $AH$ para que la interrupción $21h$ nos permita leer datos sin mostrarlos en pantalla; en caso de  que el valor en el registro $AL$ corresponda a un número en su respectivo código ASCII \footnote{\url{http://lsi.vc.ehu.es/asignaturas/FdIc/labs/a1/htm/asciis.html}}, $i.e.$ entre $30h$ y $39h$, entonces se dibujará en pantalla, de lo contrario seguirá leyendo caracteres sin mostrarlos. El planteamiento se observa de la siguiente manera:
 
     \begin{verbatim}
 ...
@@ -571,8 +571,186 @@ flujo5:
     NOTA: Es importante tener en cuenta que el valor que almacena la variable $res$ es un número entero sin signo, por lo que esta solución es solo estética y para dar una buena presentación.
 
     \subsection{Multiplicación}
+
+    La multiplicación requiere de una operación adicional, pues al multiplicar dos números de 16 bits, se obtiene un número bastante grande (ocho dígitos) como para imprimirlo siguiendo la misma metodología vista hasta el momento. El resultado se guarda en los registros $AX$ y $DX$
+
+    Este paso adicional consiste en dividir el resultado entre $10000$ para obtener dos números más pequeños de cuatro dígitos, el cociente representará la parte alta del número, i.e. decenas de millon, unidades de millon, centenas de millar y decenas de millar; y el residuo representará la parte baja del número, i.e. unidades de millar, centenas, decenas y unidades.
+
+    \begin{verbatim}
+...
+    mov ax,num1       ; AX = num1
+    mov bx,num2       ; BX = num2
+    xor dx,dx         ; DX = 0000h
+    mul bx            ; DX:AX = AX * BX
+    mov [mult],ax     ; [mult] = AX , guarda la parte baja del producto
+    mov [mult+2],dx   ; [mult+2] = DX , guarda la parte alta del producto
+
+    mov ax,mult       ; AX = mult
+    mov bx,10000      ; BX = 10000
+    div bx            ; DX:AX = AX / BX, separa el producto en dos partes 
+                      ; para imprimir el resultado en grupos de 4 digitos
+
+    mov aux1,ax       ; aux1 = AX, los primeros cuatro digitos
+    mov aux2,dx       ; aux2 = DX, los últimos cuatro digitos
+...
+    \end{verbatim}
+
+    Posteriormente, se realiza dos veces el proceso de imprimir número para cada una de estos dos números nuevos, que al momento de la impresión en pantalla parecerán formar un solo número.
+
+    \begin{verbatim}
+...
+    ; Primeros Cuatro Digitos
+    mov ax,aux1              ; AX = aux1
+
+    mov cl,4
+    call printNumero         ; Imprime el número 
+
+    ; Segundos Cuatro Digitos
+    mov ax,aux2              ; AX = aux2
+
+    mov cl,4
+    call printNumero         ; Imprime el número 
+...
+    \end{verbatim}
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/05.png}
+    \caption{Imprime multiplicación}
+    \end{figure}
+
     \subsection{División}
+
+    Esta operación también requiere hacer uso de los registros $AX$ y $DX$, pues la operación de división, como se mencionó anteriormente, guarda el resultado en estos registros. También esta operación requiere realizar las comparaciones necesarias para evitar indeterminaciones matemáticas cuando el divisor sea $0$. Si el divisor es diferente de $0$, entonces el programa procede a guardar los valores almacenados en $AX$ y $DX$ en las variables $coc$ y $residuo$ respectivamente y procede a imprimirlos con su respectivo mensaje en pantalla; si el divisor es $0$ se procede a mostrar solamente las siglas \textit{N/D} indicando que la división entre $0$ no está definida.
+
+    Para conocer el número máximo de dígitos que requiere imprimir el cociente, se hace la suposición que se divide el mayor número posible entre $1$, en este caso $9999$ entre $1$ y esto es $9999$; en el caso del residuo se hace lo opuesto, dividir $1$ entre $9999$, esto da como resultado $0$ y nuestro residuo es igual a $9999$.
+
+    \begin{verbatim}
+...
+division:
+    mov ax,num1        ; AX = num1
+    mov bx,num2        ; BX = num2
+    cmp bx,0           ; Compara BX con 0
+    je isZero          ; Si BX == 0, si el divisor es 0 entonces brinca al 
+                       ; bloque 'isZero'
+    xor dx,dx          ; DX = 0000h
+    div bx             ; DX:AX = AX / BX
+    mov coc,ax         ; coc = AX
+    mov residuo,dx     ; residuo = DX
+
+    mov ah,09h         ; Prepara registro ah para imprimir 
+                       ; un mensaje en pantalla
+    lea dx, msjDiv     ; Imprime el mensaje del Cociente
+    int 21h            ; Interrupcion 21h para controlar funciones del S.O.
+
+    mov ax,coc         ; AX = coc
+
+    mov cl,4
+    call printNumero   ; Imprime el número 
+
+    mov ah,09h         ; Prepara registro ah para imprimir 
+                       ; un mensaje en pantalla
+    lea dx,msjRes      ; Imprime mensaje del Residuo
+    int 21h            ; Interrupcion 21h para controlar funciones del S.O.
+
+    mov ax,residuo     ; AX = residuo
+        
+    mov cl,4
+    call printNumero   ; Imprime el número 
+
+    jmp menu           ; Brinca al menu final
+
+isZero:
+    mov ah,09h         ; Prepara registro ah para imprimir 
+                       ; un mensaje en pantalla
+    lea dx,msjZero     ; Imprime un mensaje
+    int 21h            ; Interrupcion 21h para controlar funciones del S.O.
+
+menu:
+...
+    \end{verbatim}
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{img/06.png}
+    \caption{Imprime Cociente y Residuo}
+    \end{figure}
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{img/07.png}
+    \caption{Imprime Division No Definida}
+    \end{figure}
+
     \subsection{Menu}
+
+    La lógica del menú para regresar al inicio consiste en hacer la espera de un caracter para realizar una operación u otra, equivalente a una estructura de tipo \textit{if/else}, si la respuesta es $S$ o $s$ entonces vuelve a comenzar; si la respuesta es $N$ o $n$, entonces finaliza la ejecución, sin embargo para implementar un mejor funcionamiento se realizaron algunas comparaciones extras para, por ejemplo, requerir que el usuario digite `enter' para guardar su respuesta, que pueda borrar el caracter que habia ingresado y que no pueda digitar caracteres no imprimibles como tabulaciones, saltos de linea, etc., también este menú muestra un mensaje de error ante una opción que no corresponda a $S$ o $N$ con sus respectivas minusculas.
+
+    \begin{verbatim}
+...
+menu:
+    mov ah,09h         ; Prepara registro ah para imprimir un mensaje
+    lea dx,msjInicio   ; Muestra mensaje para volver al inicio
+    int 21h            ; Interrupcion 21h para controlar funciones del S.O.
+
+respuesta:
+    mov ah,08h         ; Instrucción para ingresar datos sin verlos en pantalla
+    int 21h            ; Interrupcion 21h para controlar funciones del S.O.
+    cmp al,21h         ; Compara AL con 21h, los caracteres menores a 21h son  
+                       ; de control y no son imprimibles
+    jb respuesta       ; Si AL es menor a 21h entonces vuelve a leer 
+                       ; una respuesta del usuario del menu final
+
+    mov ah,02h         ; AH = 02H, prepara AH para imprimir un caracter
+    mov dl,al          ; DL = AL, AL contiene el caracter a imprimir
+    int 21h            ; Interrupcion 21h para controlar funciones del S.O.
+    mov resp,al        ; resp = AL, guarda la respuesta del usuario
+    mov cl,1
+
+typeEnter:
+    mov ah,08h         ; Instrucción para ingresar datos sin verlos en 
+                       ; pantalla
+    int 21h            ; Interrupcion 21h para controlar funciones del S.O.
+
+    cmp al,08h
+    jne flujo6
+    delete
+    jmp respuesta
+
+flujo6:
+    cmp al,0Dh         ; Compara el valor en AL con el valor hexadecimal 
+                       ; del 'enter'
+    jne typeEnter      ; Si no digita 'enter' entonces continua leyendo 
+                       ; respuestas 
+                       ; sin mostrarlas en pantalla
+
+    mov al,resp        ; AL = resp
+
+    cmp al,'S'         ; Compara AL con 'S'
+    je inicio          ; Si AL == 'S' vuelve al inicio del programa
+    cmp al,'s'         ; Compara AL con 's'
+    je inicio          ; Si AL == 's' vuelve al inicio del programa
+    cmp al,'N'         ; Compara AL con 'N'
+    je salir           ; Si AL == 'N' sale del programa
+    cmp al,'n'         ; Compara AL con 'n'
+    je salir           ; Si AL == 'n' sale del programa
+    mov ah,09h         ; Prepara registro ah para imprimir un mensaje
+    lea dx, msjError   ; Si no se cumple ninguna condicion anterior,
+                       ; imprime un mensaje de error solicitando una 
+                       ; opcion correcta
+    int 21h            ; Interrupcion 21h para controlar funciones del S.O.
+    jmp menu           ; Regresa al menu final
+
+salir:                 ; inicia etiqueta Salir
+...
+    \end{verbatim}
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\textwidth]{img/08.png}
+    \caption{Opción incorrecta}
+    \end{figure}
+
     \newpage
     \section{Diagramas de Flujo.}
     \includegraphics[width=0.48\textwidth]{img/diagramas/p01-Clear}
@@ -602,7 +780,7 @@ flujo5:
 
     \includegraphics[width=1\textwidth]{img/Suma.pdf}
 
-    \subsection{Impresión}
+    \subsection{printNum}
 
     \includegraphics[width=1\textwidth]{img/residuo.pdf}
     
