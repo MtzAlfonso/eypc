@@ -161,17 +161,18 @@ leer:
 ...
     xor cl,cl
 leer:
-    mov ah,08h               ; Instrucción para ingresar datos sin verlos en pantalla
-    int 21h                  ; Interrupcion 21h para controlar funciones del S.O.
+    mov ah,08h     ; Instrucción para ingresar datos sin verlos en pantalla
+    int 21h        ; Interrupcion 21h para controlar funciones del S.O.
 
-    cmp cl,0                 ; Compara cl con 0
-    je sinNumero             ; Si CL == 0, salta a la etiqueta sinNumero para obligar al usuario a ingresar por lo menos un digito
+    cmp cl,0       ; Compara cl con 0
+    je sinNumero   ; Si CL == 0, salta a la etiqueta sinNumero para obligar  
+                   ; al usuario a ingresar por lo menos un digito
 
     cmp al,08h
     je borrar
 
-    cmp al,0Dh               ; Compara el valor en AL con el valor hexadecimal del 'enter'
-    je flujo2                ; Si el usuario da 'enter'
+    cmp al,0Dh     ; Compara el valor en AL con el valor hexadecimal del 'enter'
+    je flujo2      ; Si el usuario da 'enter'
     jmp sinNumero
 
 borrar:

@@ -1,0 +1,15 @@
+\BOOKMARK [1][-]{section.1}{Introducci\363n}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Objetivo}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Descripci\363n del problema}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{Planteamiento del problema}{section.1}% 4
+\BOOKMARK [1][-]{section.2}{Desarrollo}{}% 5
+\BOOKMARK [2][-]{subsection.2.1}{Interrupciones}{section.2}% 6
+\BOOKMARK [3][-]{subsubsection.2.1.1}{int 21h}{subsection.2.1}% 7
+\BOOKMARK [3][-]{subsubsection.2.1.2}{int 33h}{subsection.2.1}% 8
+\BOOKMARK [3][-]{subsubsection.2.1.3}{int 10h}{subsection.2.1}% 9
+\BOOKMARK [2][-]{subsection.2.2}{C\363digo}{section.2}% 10
+\BOOKMARK [3][-]{subsubsection.2.2.1}{Interfaz gr\341fica}{subsection.2.2}% 11
+\BOOKMARK [3][-]{subsubsection.2.2.2}{Funcionamiento l\363gico}{subsection.2.2}% 12
+\BOOKMARK [1][-]{section.3}{Diagramas de flujo}{}% 13
+\BOOKMARK [1][-]{section.4}{Pruebas de escritorio}{}% 14
+\BOOKMARK [1][-]{section.5}{Conclusiones}{}% 15

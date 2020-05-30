@@ -1,0 +1,16 @@
+\babel@toc {spanish}{}
+\contentsline {section}{\numberline {1}Introducción}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Objetivo}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Descripción del problema}{2}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Planteamiento del problema}{2}{subsection.1.3}%
+\contentsline {section}{\numberline {2}Desarrollo}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Interrupciones}{3}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}int 21h}{3}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}int 33h}{3}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}int 10h}{4}{subsubsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.2}Código}{4}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Interfaz gráfica}{6}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Funcionamiento lógico}{10}{subsubsection.2.2.2}%
+\contentsline {section}{\numberline {3}Diagramas de flujo}{12}{section.3}%
+\contentsline {section}{\numberline {4}Pruebas de escritorio}{14}{section.4}%
+\contentsline {section}{\numberline {5}Conclusiones}{14}{section.5}%
