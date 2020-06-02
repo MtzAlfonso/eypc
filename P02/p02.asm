@@ -21,23 +21,23 @@ title "Proyecto 02 - Calculadora"
     nega 		        db 		0
     bandera             db      0
 
-    clear               db      20h,20h,20h,20h
-
-    num 		        dw      0          ; Almacena el valor de num1 o num2 según lo requiera el procedimiento impr
-    aux1                db      0,0,0,0    ; Almacena los digitos del primer numero
-    aux2                db      0,0,0,0    ; Almacena los digitos del segundo numero
-    mAux 		        dw 	    0,0
-
-    num_boton           db      0          ; Almacena el digitos del numero presionado
-    conta1              dw      0          ; Contador para determinar cuantos digitos se han introducido del primer numero
-    conta2              dw      0          ; Contador para determinar cuantos digitos se han introducido del segundo numero
-    operador            db      0          ; Almacena el operando seleccionado de la operacion
-
+    clear               db      20h,20h,20h,20h           ; Arreglo de espacios para borrar los números ingresados
+    clean 		        db 	    "               ","$"     ; Mensaje de espacios
+    
     msjZero 	        db	    "N/D","$"
-    clean 		        db 	    "               ","$"
 
-    col_aux             db      0          ; Variable auxiliar para el manejo de coordenadas del mouse (columna)
-    ren_aux             db      0          ; Variable auxiliar para el manejo de coordenadas del mouse (renglon)
+    num 		        dw      0                         ; Almacena el valor de num1 o num2 según lo requiera el procedimiento impr
+    aux1                db      0,0,0,0                   ; Almacena los digitos del primer numero
+    aux2                db      0,0,0,0                   ; Almacena los digitos del segundo numero
+    mAux 		        dw 	    0,0                       ; Arreglo auxiliar para dividir en dos partes el producto de la multiplicacion
+
+    num_boton           db      0                         ; Almacena el digitos del numero presionado
+    conta1              dw      0                         ; Contador para determinar cuantos digitos se han introducido del primer numero
+    conta2              dw      0                         ; Contador para determinar cuantos digitos se han introducido del segundo numero
+    operador            db      0                         ; Almacena el operando seleccionado de la operacion
+
+    col_aux             db      0                         ; Variable auxiliar para el manejo de coordenadas del mouse (columna)
+    ren_aux             db      0                         ; Variable auxiliar para el manejo de coordenadas del mouse (renglon)
 
 .code
 
@@ -49,11 +49,11 @@ inicio:
     mov ax,@data
     mov ds,ax
 
-    modoGraf                               ; rectangulo inicial
-    diburect                               ; pantallita
-    caja                                   ; dibuja cuadrado
+    modoGraf                                              ; rectangulo inicial
+    diburect                                              ; pantallita
+    caja                                                  ; dibuja cuadrado
     botones
-    escribir '=',5,2,14                    ; escribe caracter en pantalla
+    escribir '=',5,2,14                                   ; escribe caracter en pantalla
     raton
 
 mouse:
@@ -158,7 +158,7 @@ borrar:
     je salto
     borra conta2,4
 salto:
-    escribir '',3,2,14                     ; escribe caracter en pantalla
+    escribir '',3,2,14                                    ; escribe caracter en pantalla
     borraResultado
     mov aux1,0
     mov aux2,0
@@ -211,19 +211,18 @@ botonC:
     je mouse
     borra conta1,2
     dec conta1
-    jmp w
+    jmp prepara_num1
 botonC2:
     cmp conta2,0
     je mouse
     borra conta2,4
     dec conta2
     cmp conta2,0
-    jne x
-    escribir '',3,2,14                     ; escribe caracter en pantalla
+    jne prepara_num2
+    escribir '',3,2,14                                    ; escribe caracter en pantalla
     mov [operador],0
     mov [ren_aux],2
     mov [col_aux],29
-    mov aux2,0
 
 
 botonX:
@@ -232,35 +231,45 @@ botonX:
 
 botonMultiplicacion:
     isButton 159,198,74,98
+    cmp [bandera],0
+    jne mouse
     cmp [conta1],0
     je mouse
     mov [operador],'x'
-    escribir [operador],3,2,14             ; escribe caracter en pantalla
+    escribir [operador],3,2,14                            ; escribe caracter en pantalla
 botonDivisionCociente:
     isButton 159,198,104,128
+    cmp [bandera],0
+    jne mouse
     cmp [conta1],0
     je mouse
     mov [operador],'/'
-    escribir [operador],3,2,14             ; escribe caracter en pantalla
+    escribir [operador],3,2,14                            ; escribe caracter en pantalla
 botonResta:
     isButton 159,198,134,158
+    cmp [bandera],0
+    jne mouse
     cmp [conta1],0
     je mouse
     mov [operador],'-'
-    escribir [operador],3,2,14             ; escribe caracter en pantalla
+    escribir [operador],3,2,14                            ; escribe caracter en pantalla
 botonSuma:
     isButton 159,198,164,188
+    cmp [bandera],0
+    jne mouse
     cmp [conta1],0
     je mouse
     mov [operador],'+'
-    escribir [operador],3,2,14             ; escribe caracter en pantalla
+    escribir [operador],3,2,14                            ; escribe caracter en pantalla
 
 botonDivisionResiduo:
     isButton 209,248,74,98
+    cmp [bandera],0
+    jne mouse
     cmp [conta1],0
     je mouse
     mov [operador],'%'
-    escribir [operador],3,2,14             ; escribe caracter en pantalla
+    escribir [operador],3,2,14                            ; escribe caracter en pantalla
 botonResultado:
     isButton 209,248,104,188
     cmp [conta2],0
@@ -269,44 +278,44 @@ botonResultado:
     mov num1,ax
     call procesarNumero2
     mov num2,ax
-    borraResultado
+    escribir '',5,4,14                                    ; posiciona el cursor en el renglon 5, columna 4
     operacion [operador]
     mov bandera,1
+
 no_lee_num:
     jmp mouse
 lee_num1:
     cmp [bandera],0
     jne mouse
-    cmp [operador],0                       ; compara el valor del operador que puede ser 0, '+', '-', '*', '/', '%'
-    jne lee_num2                           ; Si el operador es diferente de 0, entonces lee el segundo numero
-    cmp [conta1],4                         ; compara si el contador para num1 llego al maximo
-    jae no_lee_num                         ; si conta1 es mayor o igual a 4, entonces se ha alcanzado el numero de digitos
-                                           ; y no hace nada
-    mov al,num_boton                       ; valor del boton presionado en AL
-    mov di,[conta1]                        ; copia el valor de conta1 en registro indice DI
-    mov [aux1+di],al                       ; num1 es un arreglo de tipo byte
-                                           ; se utiliza di para acceder el elemento di-esimo del arreglo num1
-                                           ; se guarda el valor del boton presionado en el arreglo
-    inc [conta1]                           ; incrementa conta1 por numero correctamente leido
-w:
+    cmp [operador],0                                      ; compara el valor del operador que puede ser 0, '+', '-', '*', '/', '%'
+    jne lee_num2                                          ; Si el operador es diferente de 0, entonces lee el segundo numero
+    cmp [conta1],4                                        ; compara si el contador para num1 llego al maximo
+    jae no_lee_num                                        ; si conta1 es mayor o igual a 4, entonces se ha alcanzado el numero de digitos
+                                                          ; y no hace nada
+    mov al,num_boton                                      ; valor del boton presionado en AL
+    mov di,[conta1]                                       ; copia el valor de conta1 en registro indice DI
+    mov [aux1+di],al                                      ; num1 es un arreglo de tipo byte
+                                                          ; se utiliza di para acceder el elemento di-esimo del arreglo num1
+                                                          ; se guarda el valor del boton presionado en el arreglo
+    inc [conta1]                                          ; incrementa conta1 por numero correctamente leido
+prepara_num1:
     ; Se imprime el numero del arreglo num1 de acuerdo a conta1
-    xor di,di                              ; limpia DI para utilizarlo
-    mov cx,[conta1]                        ; prepara CX para loop de acuerdo al numero de digitos introducidos
-    mov [ren_aux],2                        ; variable ren_aux para poner cursor en pantalla
-                                           ; ren_aux se mantiene fijo a lo largo del siguiente loop
-                                           ; Loop para imprimir numero
-
+    xor di,di                                             ; limpia DI para utilizarlo
+    mov cx,[conta1]                                       ; prepara CX para loop de acuerdo al numero de digitos introducidos
+    mov [ren_aux],2                                       ; variable ren_aux para poner cursor en pantalla
+                                                          ; ren_aux se mantiene fijo a lo largo del siguiente loop
+                                                          ; Loop para imprimir numero
 imprime_num1:
-    push cx                                ; guarda el valor de CX en la pila
+    push cx                                               ; guarda el valor de CX en la pila
     cmp conta1,0
     je mouse
-    mov [col_aux],30                       ; variable col_aux para mover cursor en pantalla
-    sub [col_aux],cl                       ; Para calcular la columna en donde comienza a imprimir en pantalla de acuerdo a CX
-    mov cl,[aux1+di]                       ; copia el digito en CL
-    add cl,30h                             ; Pasa valor a ASCII
-    escribir cl,[ren_aux],[col_aux],15     ; escribe caracter en pantalla
-    inc di                                 ; incrementa DI para recorrer el arreglo num1
-    pop cx                                 ; recupera el valor de CX al inicio del loop
+    mov [col_aux],30                                      ; variable col_aux para mover cursor en pantalla
+    sub [col_aux],cl                                      ; Para calcular la columna en donde comienza a imprimir en pantalla de acuerdo a CX
+    mov cl,[aux1+di]                                      ; copia el digito en CL
+    add cl,30h                                            ; Pasa valor a ASCII
+    escribir cl,[ren_aux],[col_aux],15                    ; escribe caracter en pantalla
+    inc di                                                ; incrementa DI para recorrer el arreglo num1
+    pop cx                                                ; recupera el valor de CX al inicio del loop
     loop imprime_num1
     ; Fin loop
     jmp mouse
@@ -320,42 +329,42 @@ imprime_num1:
   no_lee_num2:
     jmp mouse
 lee_num2:
-    cmp [conta2],4                         ; compara si el contador para num2 llego al maximo
-    jae no_lee_num2                        ; si conta1 es mayor o igual a 4, entonces se ha alcanzado el numero de digitos
-                                           ; y no hace nada
-    mov al,num_boton                       ; valor del boton presionado en AL
-    mov di,[conta2]                        ; copia el valor de conta1 en registro indice DI
-    mov [aux2+di],al                       ; num2 es un arreglo de tipo byte
-                                           ; se utiliza di para acceder el elemento di-esimo del arreglo num2
-                                           ; se guarda el valor del boton presionado en el arreglo
-    inc [conta2]                           ; incrementa conta1 por numero correctamente leido
-x:
+    cmp [conta2],4                                        ; compara si el contador para num2 llego al maximo
+    jae no_lee_num2                                       ; si conta1 es mayor o igual a 4, entonces se ha alcanzado el numero de digitos
+                                                          ; y no hace nada
+    mov al,num_boton                                      ; valor del boton presionado en AL
+    mov di,[conta2]                                       ; copia el valor de conta1 en registro indice DI
+    mov [aux2+di],al                                      ; num2 es un arreglo de tipo byte
+                                                          ; se utiliza di para acceder el elemento di-esimo del arreglo num2
+                                                          ; se guarda el valor del boton presionado en el arreglo
+    inc [conta2]                                          ; incrementa conta1 por numero correctamente leido
+prepara_num2:
     ; Se imprime el numero del arreglo num2 de acuerdo a conta1
-    xor di,di                              ; limpia DI para utilizarlo
-    mov cx,[conta2]                        ; prepara CX para loop de acuerdo al numero de digitos introducidos
-    mov [ren_aux],4                        ; variable ren_aux para poner cursor en pantalla
-                                           ; ren_aux se mantiene fijo a lo largo del siguiente loop
-                                           ; Loop para imprimir numero
+    xor di,di                                             ; limpia DI para utilizarlo
+    mov cx,[conta2]                                       ; prepara CX para loop de acuerdo al numero de digitos introducidos
+    mov [ren_aux],4                                       ; variable ren_aux para poner cursor en pantalla
+                                                          ; ren_aux se mantiene fijo a lo largo del siguiente loop
+                                                          ; Loop para imprimir numero
 
 imprime_num2:
-    push cx                                ; guarda el valor de CX en la pila
+    push cx                                               ; guarda el valor de CX en la pila
     cmp conta2,0
     je mouse
-    mov [col_aux],30                       ; variable col_aux para mover cursor en pantalla
-                                           ; para recorrer la pantalla al imprimir el numero
-    sub [col_aux],cl                       ; Para calcular la columna en donde comienza a imprimir en pantalla de acuerdo a CX
-    mov cl,[aux2+di]                       ; copia el digito en CL
-    add cl,30h                             ; Pasa valor a ASCII
-    escribir cl,[ren_aux],[col_aux],15     ; escribe caracter en pantalla
-    inc di                                 ; incrementa DI para recorrer el arreglo num2
-    pop cx                                 ; recupera el valor de CX al inicio del loop
+    mov [col_aux],30                                      ; variable col_aux para mover cursor en pantalla
+                                                          ; para recorrer la pantalla al imprimir el numero
+    sub [col_aux],cl                                      ; Para calcular la columna en donde comienza a imprimir en pantalla de acuerdo a CX
+    mov cl,[aux2+di]                                      ; copia el digito en CL
+    add cl,30h                                            ; Pasa valor a ASCII
+    escribir cl,[ren_aux],[col_aux],15                    ; escribe caracter en pantalla
+    inc di                                                ; incrementa DI para recorrer el arreglo num2
+    pop cx                                                ; recupera el valor de CX al inicio del loop
     loop imprime_num2
     ; Fin loop
     jmp mouse
 
 salir:
-  modoText                                 ; Para limpiar la pantalla y devolverla a su estado original
-                                           ; para salir del programa sin tener que apagar DOS
+  modoText                                                ; Para limpiar la pantalla y devolverla a su estado original
+                                                          ; para salir del programa sin tener que apagar DOS
   mov ah, 4Ch
   mov al, 0
   int 21h

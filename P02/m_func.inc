@@ -10,10 +10,6 @@ isButton macro xmin,xmax,ymin,ymax
     ja mouse                              ; Si CX > xmax, regresa a etiqueta 'mouse'
 endm
 
-delete macro                            ; macro para eliminar un caracter
-    escribir ' ',[ren_aux],[col_aux],15 ; escribe caracter en pantalla
-endm delete
-
 borra macro cont,n
     local borra_num
 

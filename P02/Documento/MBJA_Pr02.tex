@@ -36,7 +36,7 @@
         \vspace{2cm}
         {\Large 
             Martínez Baeza José Alfonso\\
-            Santana sanchez María Yvette
+            Santana Sánchez María Yvette
         \par}
         \vfill
         {\large 03 de junio de 2020\par}
@@ -217,8 +217,8 @@
             \begin{minipage}{0.85\linewidth}
                 \begin{description}
                     \item[\textcolor{blue}{Parámetro 1:}] La extensión de la línea horizontal hacia la izquierda.
-                    \item[\textcolor{green}{Parámetro 2:}] La extensión de la línea horizontal hacia la derecha.
-                    \item[\textcolor{red}{Parámetro 3:}] La posición de la línea horizontal más arriba o abajo.
+                    \item[\textcolor{red}{Parámetro 2:}] La extensión de la línea horizontal hacia la derecha.
+                    \item[\textcolor{green}{Parámetro 3:}] La posición de la línea horizontal más arriba o abajo.
                     \item[Parámetro 4:] Determina el color.
                 \end{description}
             \end{minipage}
@@ -229,8 +229,8 @@
             \begin{minipage}{0.85\linewidth}
                 \begin{description}
                     \item[\textcolor{blue}{Parámetro 1:}] La extensión de la línea vertical hacia la izquierda.
-                    \item[\textcolor{green}{Parámetro 2:}] La extensión de la línea vertical hacia la derecha.
-                    \item[\textcolor{red}{Parámetro 3:}] La posición de la línea vertical más arriba o abajo.
+                    \item[\textcolor{red}{Parámetro 2:}] La extensión de la línea vertical hacia la derecha.
+                    \item[\textcolor{green}{Parámetro 3:}] La posición de la línea vertical más arriba o abajo.
                     \item[Parámetro 4:] Determina el color.
                 \end{description}
             \end{minipage}
@@ -272,8 +272,8 @@
             \begin{minipage}{0.85\linewidth}
                 \begin{description}
                     \item[\textcolor{blue}{Parámetro 1:}] Se envía el carácter que deseamos imprimir dentro del modo gráfico.
-                    \item[\textcolor{green}{Parámetro 2:}] Posiciona el carácter hacia arriba o abajo.
-                    \item[\textcolor{red}{Parámetro 3:}] Posiciona el carácter hacia la derecha o izquierda
+                    \item[\textcolor{red}{Parámetro 2:}] Posiciona el carácter hacia arriba o abajo.
+                    \item[\textcolor{green}{Parámetro 3:}] Posiciona el carácter hacia la derecha o izquierda
                     \item[Parámetro 4:] Determina el color del caracter.
                 \end{description}
             \end{minipage}
@@ -284,8 +284,8 @@
             \begin{minipage}{0.85\linewidth}
                 \begin{description}
                     \item[\textcolor{blue}{Parámetro 1:}] Posiciona el botón hacia arriba o abajo.
-                    \item[\textcolor{green}{Parámetro 2:}] Posiciona el botón hacia la derecha o hacia la izquierda.
-                    \item[\textcolor{red}{Parámetro 3:}] Determina el color del botón.
+                    \item[\textcolor{red}{Parámetro 2:}] Posiciona el botón hacia la derecha o hacia la izquierda.
+                    \item[\textcolor{green}{Parámetro 3:}] Determina el color del botón.
                 \end{description}
             \end{minipage}
         \end{center}
@@ -316,7 +316,7 @@
 
     \subsubsection{Funcionamiento lógico}
 
-    Una vez que se tiene la interfaz gráfica dibujada es necesario programar el código necesario para hacer funcionar cada uno de los botones. En este caso, a diferencia de otros lenguajes de alto nivel, es necesario ir delimitando la zona de cada botón en donde permitirá dar clic.
+    Una vez que se tiene la interfaz gráfica dibujada es necesario programar el código necesario para hacer funcionar cada uno de los botones, para esto es necesario ir delimitando la zona de cada botón en donde permitirá dar clic.
 
     Al iniciar se verifica si se presiona el boton izquierdo del mouse, una vez que se comprueba esto se compara con el número de columna, si es menor o igual a $48$ es probable que se haya presionado sobre los botones más a la izquierda (7,4,1 o AC); si es menor o igual a $98$ es probable que se haya presionado sobre los números del centro (8,5,2 o 0); si es menor o igual a $148$ es probable que se haya presionado sobre los números más a la derecha (9,6,3 o DEL); si es menor o igual a $198$ es probable que se haya presionado sobre los botones de operaciones (X,/,$-$ o $+$) y si es menor o igual a $198$ es probable que se haya presionado sobre los botones más a la derecha (\% o $=$)
 
@@ -332,8 +332,112 @@
         \includegraphics[width=0.8\textwidth]{img/19.png}
     \end{center}
 
+    Una vez que se comprueba que se hace clic sobre un botón se realizan distintas operaciones dependiendo del tipo de botón del cual se trate.
+
+    Si es un \textbf{número} se almacena el valor correspondiente en la variable \textit{num\_boton} y da el salto a la etiqueta \textit{lee\_num1}
+
+    \begin{center}
+        \includegraphics[width=0.6\textwidth]{img/20.png}
+        \includegraphics[width=0.85\textwidth]{img/20-1.png}
+        \includegraphics[width=0.85\textwidth]{img/20-2.png}
+    \end{center}
+
+    Esta parte del código se encarga de almacenar el dígito almacenado en la variable \textit{num\_boton} en un arreglo de 4 elementos tipo Byte e imprimirlos en pantalla recorriendo el arreglo con ayuda del registro \textit{di}. Tambíen se encarga de comprobar si ingresamos por lo menos un dígito para no permitir al usuario efectuar operaciones sin números, comprueba si estamos ingresando dígitos para el primer o segundo número o si el resultado ya se muestra en pantalla para no cambiar los números sin limpiar antes a pantalla.
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{img/21.png}
+    \caption{Lee e imprime digitos del primer número.}
+    \end{figure}
+
+    Si el botón fuera de operación entonces se verifica que se haya ingresado por lo menos un número comprobando \textit{conta1} con $0$, si es igual entonces no permite ingresar ningún símbolo y si es distinto de $0$ (o en este caso mayor), guarda el respectivo símbolo en la variable \textit{operador} y lo pinta en pantalla con un color amarillo un renglón abajo del primer número y completamente a la izquierda.
+
+    \begin{center}
+        \includegraphics[width=0.37\textwidth]{img/22.png}
+    \end{center}
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/23.png}
+    \caption{Imprime símbolo de la operación aritmética a realizar.}
+    \end{figure}
+
+    Para el segundo número se comprueba si la variable \textit{operador} es distinto de cero, para este punto esta comprobación será verdadera por lo que comenzaremos a almacenar dígitos en un segundo arreglo para posteriormente imprimir el segundo número 2 renglones más abajo del primero.
+
+    Fuera de esto las operaciones realizadas son las mismas que para el primer número.
+
+    Cabe aclarar que para ambos números el programa deja de leer dígitos cuando el respectivo contador (\textit{conta1} o \textit{conta2}) llegue a 4.
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/24.png}
+    \caption{Lee e imprime dígitos del segundo número.}
+    \end{figure}
+
+    El siguiente botón es el de resultado, este botón podría decirse que contiene la lógica más importante del programa debido a que es aquí donde se procesan los dígitos previamente almacenados en arreglo y a su vez hace llamado de las procedimientos y macros que se encargan de realizar e imprimir las operaciones.
+
+    \begin{center}
+        \includegraphics[width=0.4\textwidth]{img/25.png}
+    \end{center}
+
+    Los procedimientos \textit{procesarNum1} y \textit{procesarNum2} fueron reutilizados del proyecto anterior pero adaptados de tal manera que utilizaran los valores almacenados en un arreglo a diferencia de las variables independientes dedicadas a almacenar unidades, decenas, centenas o millares.
+
+    \begin{center}
+        \includegraphics[width=0.45\textwidth]{img/26.png}
+        \includegraphics[width=0.42\textwidth]{img/27.png}
+    \end{center}
+
+    Posteriormente es necesario posicionar el cursor al final del signo $=$, esto para poder imprimir el resultado reutilizando el código del proyecto anterior utilizando la interrupción $21h$ descrita con anterioridad. 
+
+    Para realizar la operación deseada hacemos uso de la macro \textit{operacion} pasando como parámetro a \textit{operador}. Una diferencia importante con respecto al proyecto anterior es que esta calculadora no requiere de realizar todos las operaciones por cada ejecución, por lo que implementamos un salto al final de cada operación para salir de este procedimiento. 
+    
+    Independientemente a los cambios mencionados y junto con la usencia de mensajes en pantalla, la implementación de las operaciones aritméticas del proyecto anterior es la misma.
+
+    Al final se cambia el valor de la variable \textit{bandera} a $1$ para indicar que el resultado ya se muestra en pantalla, esto nos servirá para cambiar ligeramente el funcionamiento del botón \textit{DEL} para que se comporte igual que \textit{AC} los cuales se explicarán más adelante.
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/28.png}
+    \caption{Imprime el resultado de la operación realizada.}
+    \end{figure}
+
+    Otro tipo de botones, como hemos podido ver, son los diseñados para borrar, ya sea dígito por dígito (\textit{DEL}) o toda la pantalla al mismo tiempo (\textit{AC}).
+
+    La implementación de estos botones parecía sencilla durante el planteamiento, sin embargo, fue una de la que más nos costó trabajo al momento de afinar detalles pues en nuestras primeras pruebas los dígitos parecían borrarse pero dejaba remanentes en pantalla al continuar escribiendo, es decir, si por ejemplo escribíamos $1234$ y borrábamos dos dígitos ($12\_\_$) porque realmente queríamos escribir $128$ había un error de impresión por el cual se pintaba en pantalla el número $1128$, sin embargo el resultado se imprimía correctamente utilizando como operandos los números deseados, que para este ejemplo es $128$.
+
+    Así mismo, una primera solución para el botón AC era dar un salto a la etiqueta \textit{inicio} no sin antes inicializar las variables en $0$'s, pero estéticamente no era de nuestro agrado, pues generaba un parpadeo en la pantalla, es por esto que decidimos aplicar un método un poco ``\textit{arcaico}'' (por decirlo de alguna manera) que consiste en declarar un mensaje de 8 espacios en blanco e imprimirlos en la misma posición donde estaba la impresión del resultado y un arreglo de 4 espacios para sobreescribir los operandos.
+
+    \begin{center}
+        \includegraphics[width=0.45\textwidth]{img/29.png}
+        \includegraphics[width=0.9\textwidth]{img/30.png}
+    \end{center}
+
+    Una vez que se detecta el botón, se compara si el contador del primero número es $0$, si es asi entonces no borra nada y solo inicializa variables en caso de ser mayor a $0$ entonces imprime el arreglo de espacios segun la cantidad de dígitos que haya guardado, todo esto con ayuda del registro $di$. Lo mismo sucede para el segundo número. Y para el resultado imprime un mensaje de 8 espacios debido a que es la cantidad máxima de dígitos que puede mostrar el resultado.
+
+    \begin{center}
+        \includegraphics[width=0.9\textwidth]{img/31.png}
+        \includegraphics[width=0.65\textwidth]{img/32.png}
+    \end{center}
+
+    Para el botón \textit{DEL}, primero se compara la \textit{bandera} con $0$, pues de ser diferente de 0 el funcionamiento de este botón es idéntico al de \textit{AC}, es decir, borra la pantalla.
+
+    De lo contrario, se compara ahora el estado del \textit{operador}, ya que este nos indica cuál de los dos número es el que se está modificando.
+
+    Si resulta ser $0$ el valor de ambas comparaciones entonces se procede a eliminar el último dígito del primer número.
+
+    Si en la segunda comparación \textit{operador} contiene un valor diferente de $0$, entonces se elimina el último dígito del segundo número.
+
+    En el proceso de borrado de dígitos del segundo número, cuando el contador llega a $0$ también de borra de la pantalla el símbolo del operando.
+
     \section{Diagramas de flujo}
-    \includepdf[fitpaper=true]{img/diagramas/p02}
+    \begin{center} 
+        \includegraphics[width=1\textwidth]{img/diagramas/p02.pdf}
+
+        \includegraphics[width=0.73\textwidth]{img/diagramas/p01-ProcNum.pdf}
+
+        \includegraphics[width=1\textwidth]{img/diagramas/p01-PrintNum.pdf}
+    \end{center}
+
     \section{Pruebas de escritorio}
     \section{Conclusiones}
 
